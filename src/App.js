@@ -4,6 +4,7 @@ import Boton from './componentes/Boton';
 import Pantalla from './componentes/Pantalla';
 import BotonClear from './componentes/BotonClear';
 import { useState } from 'react';
+import { evaluate } from 'mathjs';
 
 function App() {
 
@@ -12,6 +13,21 @@ function App() {
   const agregarInput = val => {
     setInput(input + val);
   };
+
+  const calcularResultado = () => {
+    try {
+      const result = evaluate(input);
+
+      if (isNaN(result) || !isFinite(result)) {
+        throw new Error("Operación no válida");
+      }
+
+      setInput(result.toString());
+    } catch (error) {
+      alert("Operación no válida. Por favor, ingrese una expresión aritmética válida.");
+    }
+  };
+  
 
   return (
     <div className="App">
@@ -42,7 +58,7 @@ function App() {
           <Boton manejarClic={agregarInput}>*</Boton>
         </div>
         <div className='fila'>
-          <Boton manejarClic>=</Boton>
+          <Boton manejarClic={calcularResultado}>=</Boton>
           <Boton manejarClic={agregarInput}>0</Boton>
           <Boton manejarClic={agregarInput}>.</Boton>
           <Boton manejarClic={agregarInput}>/</Boton>
